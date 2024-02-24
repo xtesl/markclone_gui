@@ -39,6 +39,9 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final markcloneContainerHeight = screenHeight * 0.5;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -46,25 +49,27 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
           children: [
             ClipPath(
               clipper: CircularBottomClipper(300, 0.7),
-              child: Container(
-                height: 450,
-                width: 500,
-                decoration: const BoxDecoration(
-                  color: CustomColors.primaryColor,
-                ),
-                child: Center(
-                  child: Container(
-                      padding: const EdgeInsets.only(bottom: 270.0),
-                      child: Image.asset(
-                        'assets/images/M.png',
-                        height: 100.0,
-                        color: Colors.white,
-                      )),
+              child: SafeArea(
+                child: Container(
+                  padding: EdgeInsets.only(top: screenHeight * 0.05),
+                  height: markcloneContainerHeight,
+                  decoration: const BoxDecoration(
+                    color: CustomColors.primaryColor,
+                  ),
+                  child: Center(
+                    child: Container(
+                        padding: const EdgeInsets.only(bottom: 200),
+                        child: Image.asset(
+                          'assets/images/M.png',
+                          height: 100.0,
+                          color: Colors.white,
+                        )),
+                  ),
                 ),
               ),
             ),
             const SizedBox(
-              height: 150.0,
+              height: 150,
             ),
             PrimaryCustomButton(
                 onpressed: () {
@@ -72,7 +77,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
                 },
                 text: 'SIGN UP'),
             const SizedBox(
-              height: 20.0,
+              height: 20,
             ),
             PrimaryCustomButton(
                 onpressed: () {

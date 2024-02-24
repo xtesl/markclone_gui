@@ -18,6 +18,7 @@ import 'package:markclone/constants/colors.dart';
 
 class EmailForm extends StatefulWidget {
   const EmailForm({super.key});
+  static var formValue = '';
 
   @override
   State<EmailForm> createState() => _EmailFormState();
@@ -25,6 +26,13 @@ class EmailForm extends StatefulWidget {
 
 class _EmailFormState extends State<EmailForm> {
   final controller = TextEditingController();
+
+  @override
+  void initState() {
+    controller.text = EmailForm.formValue;
+    super.initState();
+  }
+
   final emailRegex =
       RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
   @override
@@ -38,6 +46,7 @@ class _EmailFormState extends State<EmailForm> {
           onChanged: (value) {
             setState(() {
               controller.text = value.trim();
+              EmailForm.formValue = value.trim();
             });
           },
           controller: controller,
@@ -48,11 +57,11 @@ class _EmailFormState extends State<EmailForm> {
                 child: const Icon(Icons.email_rounded),
               ),
               suffixIcon: controller.text.isNotEmpty &&
-                      emailRegex.hasMatch(controller.text)
+                      emailRegex.hasMatch(controller.text.trim())
                   ? const Icon(Icons.done, color: Colors.green)
                   : null,
               error: (controller.text.isNotEmpty) &&
-                      !emailRegex.hasMatch(controller.text)
+                      !emailRegex.hasMatch(controller.text.trim())
                   ? SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -100,6 +109,7 @@ class _EmailFormState extends State<EmailForm> {
 class PasswordForm extends StatefulWidget {
   final String hintText;
   const PasswordForm({super.key, required this.hintText});
+  static var formValue = '';
 
   @override
   State<PasswordForm> createState() => _PasswordFormState();
@@ -107,6 +117,7 @@ class PasswordForm extends StatefulWidget {
 
 class _PasswordFormState extends State<PasswordForm> {
   final controller = TextEditingController();
+
   final passwordRegex =
       RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{6,}$');
   String? hintText;
@@ -117,9 +128,12 @@ class _PasswordFormState extends State<PasswordForm> {
   @override
   void initState() {
     hintText = widget.hintText;
+    controller.text = PasswordForm.formValue;
     show = false;
     super.initState();
   }
+
+  // String get value => controller.text;
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +146,8 @@ class _PasswordFormState extends State<PasswordForm> {
           obscureText: !show!,
           onChanged: (value) {
             setState(() {
-              controller.text = value;
+              controller.text = value.trim();
+              PasswordForm.formValue = value.trim();
               if (controller.text.isEmpty) {
                 show = false;
                 showPasswordIcon = Icons.visibility;
@@ -231,16 +246,95 @@ class _PasswordFormState extends State<PasswordForm> {
   }
 }
 
-class PhonesignupForm extends StatefulWidget {
-  const PhonesignupForm({super.key});
+class EmailVerifyForm extends StatefulWidget {
+  const EmailVerifyForm({super.key});
+  static String formValue = ''; //otp entered by user
+  static String otp = ''; //otp from the server
+  static bool isCorrect = false;
 
   @override
-  State<PhonesignupForm> createState() => _PhonesignupFormState();
+  State<EmailVerifyForm> createState() => _EmailVerifyFormState();
 }
 
-class _PhonesignupFormState extends State<PhonesignupForm> {
+class _EmailVerifyFormState extends State<EmailVerifyForm> {
   final controller = TextEditingController();
-  Country selectedCountry = Country(
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   controller.text = EmailForm.formValue;
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: SizedBox(
+        width: 350.0,
+        child: TextFormField(
+          controller: controller,
+          onChanged: (value) {
+            setState(() {
+              EmailVerifyForm.formValue = value.trim();
+              if (EmailVerifyForm.formValue == EmailVerifyForm.otp) {
+                EmailVerifyForm.isCorrect =
+                    true; // user entered the correct otp
+              }
+            });
+            if (value.length <= 6) {
+              setState(() {
+                controller.text = value;
+              });
+            } else {
+              setState(() {
+                controller.text = controller.text
+                    .substring(0, 6); //Required verification code length
+              });
+            }
+          },
+          textAlign: TextAlign.center,
+          keyboardType: TextInputType.number,
+          style: const TextStyle(fontSize: 20.0),
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          cursorColor: CustomColors.primaryColor,
+          decoration: InputDecoration(
+              hintText: 'Enter Code',
+              hintStyle: const TextStyle(fontWeight: FontWeight.bold),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide:
+                      const BorderSide(color: CustomColors.primaryColor)),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide:
+                      const BorderSide(color: CustomColors.primaryColor))),
+        ),
+      ),
+    );
+  }
+}
+
+//phone number form
+class PhoneForm extends StatefulWidget {
+  final String hintText;
+  const PhoneForm({super.key, required this.hintText});
+  static String formValue = '';
+  @override
+  State<PhoneForm> createState() => _PhoneFormState();
+}
+
+class _PhoneFormState extends State<PhoneForm> {
+  final controller = TextEditingController();
+  String? hintText;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.text = PhoneForm.formValue;
+    hintText = widget.hintText;
+  }
+
+  Country country = Country(
       phoneCode: '233',
       countryCode: 'GH',
       e164Sc: 0,
@@ -251,6 +345,7 @@ class _PhonesignupFormState extends State<PhonesignupForm> {
       displayName: 'Ghana',
       displayNameNoCountryCode: 'GH',
       e164Key: '');
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -260,14 +355,15 @@ class _PhonesignupFormState extends State<PhonesignupForm> {
         child: TextFormField(
           controller: controller,
           onChanged: (value) {
+            PhoneForm.formValue = value.trim();
             if (value.length <= 10) {
               setState(() {
                 controller.text = value;
               });
             } else {
               setState(() {
-                controller.text =
-                    controller.text.substring(0, 10); //Gh phone maxLength is 10
+                controller.text = controller.text
+                    .substring(0, 10); //Required verification code length
               });
             }
           },
@@ -277,24 +373,25 @@ class _PhonesignupFormState extends State<PhonesignupForm> {
           cursorColor: CustomColors.primaryColor,
           decoration: InputDecoration(
               prefixIcon: Container(
-                  padding: const EdgeInsets.only(top: 10, right: 8.0),
-                  child: InkWell(
-                    onTap: () {
-                      showCountryPicker(
-                          context: context,
-                          countryListTheme: const CountryListThemeData(
-                              bottomSheetHeight: 500.0),
-                          onSelect: (value) {
-                            setState(() {
-                              selectedCountry = value;
-                            });
-                          });
-                    },
-                    child: Text(
-                      "${selectedCountry.flagEmoji} + ${selectedCountry.phoneCode}",
-                      style: const TextStyle(fontSize: 22.0),
-                    ),
-                  )),
+                padding: const EdgeInsets.only(top: 8, right: 8.0),
+                child: InkWell(
+                  onTap: () {
+                    //   showCountryPicker(
+                    //       context: context,
+                    //       onSelect: (value) {
+                    //         setState(() {
+                    //           country = value; //
+                    //         });
+                    //       });
+                  },
+                  child: Text(
+                    "${country.flagEmoji} +${country.phoneCode}",
+                    style: const TextStyle(fontSize: 22.0),
+                  ),
+                ),
+              ),
+              hintText: hintText,
+              hintStyle: const TextStyle(fontWeight: FontWeight.bold),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
                   borderSide:

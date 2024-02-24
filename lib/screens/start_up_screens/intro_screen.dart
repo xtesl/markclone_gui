@@ -7,7 +7,6 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:markclone/Functionalities/special_functions.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markclone/constants/colors.dart';
 import 'package:markclone/screens/start_up_screens/login_signup_screen.dart';
@@ -21,93 +20,99 @@ class IntroScreen extends StatefulWidget {
 
 class _IntroScreenState extends State<IntroScreen> {
   @override
-  void initState() {
-    super.initState();
-    seekLocation(); // Request the location settings of the device.
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-        body: SafeArea(
-            child: SingleChildScrollView(
-      child: Container(
-        decoration: const BoxDecoration(color: CustomColors.primaryColor),
-        child: Column(
-          children: [
-            Row(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            decoration: const BoxDecoration(color: CustomColors.primaryColor),
+            child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 25.0, left: 10.0),
-                  child: Text(
-                    'Markclone',
-                    style:
-                        GoogleFonts.sail(color: Colors.white, fontSize: 30.0),
-                  ),
-                )
-              ],
-            ),
-            Container(
-                height: 456.0,
-                padding: const EdgeInsets.only(right: 90.0, top: 30.0),
-                child: Image.asset(
-                  'assets/images/intro_image.png',
-                  fit: BoxFit.cover,
-                )),
-            SafeArea(
-              child: Container(
-                height: 321,
-                width: 408.0,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                Row(
                   children: [
-                    Text(
-                      'Buy the best one',
-                      style: GoogleFonts.sreeKrushnadevaraya(
-                          fontSize: 25.0,
+                    Container(
+                      padding: EdgeInsets.only(
+                          top: screenHeight * 0.02, left: screenWidth * 0.02),
+                      child: Text(
+                        'MingleCart',
+                        style: GoogleFonts.sail(
+                            color: Colors.white, fontSize: screenWidth * 0.06),
+                      ),
+                    )
+                  ],
+                ),
+                Container(
+                  height: screenHeight * 0.5,
+                  padding: EdgeInsets.only(
+                      right: screenWidth * 0.2, top: screenHeight * 0.05),
+                  child: Image.asset(
+                    'assets/images/intro_image.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.1,
+                      vertical: screenHeight * 0.02),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(screenWidth * 0.02),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Buy the best one',
+                        style: GoogleFonts.sreeKrushnadevaraya(
+                          fontSize: screenWidth * 0.05,
                           fontWeight: FontWeight.bold,
-                          color: CustomColors.primaryColor),
-                    ),
-                    Text(
-                      'Buy quality and reliable products including second-hand goods from our trusted sellers.',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.sreeKrushnadevaraya(
-                          fontSize: 20.0,
+                          color: CustomColors.primaryColor,
+                        ),
+                      ),
+                      Text(
+                        'Buy quality and reliable products including second-hand goods from our trusted sellers.',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.sail(
+                          fontSize: screenWidth * 0.05,
                           fontWeight: FontWeight.w500,
-                          color: CustomColors.primaryColor),
-                    ),
-                    const SizedBox(
-                      height: 90.0,
-                    ),
-                    ElevatedButton(
-                        style: const ButtonStyle(
-                            elevation: MaterialStatePropertyAll<double>(20.0),
-                            minimumSize: MaterialStatePropertyAll<Size>(
-                                Size(200.0, 55.0)),
-                            backgroundColor: MaterialStatePropertyAll<Color>(
-                                CustomColors.primaryColor)),
+                          color: CustomColors.primaryColor,
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.05),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          elevation: MaterialStateProperty.all<double>(20.0),
+                          minimumSize: MaterialStateProperty.all<Size>(
+                              Size(screenWidth * 0.4, screenHeight * 0.09)),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              CustomColors.primaryColor),
+                        ),
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (context) {
-                            return const LoginSignUpPage();
-                          }));
+                            MaterialPageRoute(builder: (context) {
+                              return const LoginSignUpPage();
+                            }),
+                          );
                         },
                         child: Text(
                           'Get started',
-                          style: GoogleFonts.sreeKrushnadevaraya(
-                              color: Colors.white, fontSize: 25.0),
-                        ))
-                  ],
+                          style: GoogleFonts.roboto(
+                            color: Colors.white,
+                            fontSize: screenWidth * 0.1,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              ],
+            ),
+          ),
         ),
       ),
-    )));
+    );
   }
 }
